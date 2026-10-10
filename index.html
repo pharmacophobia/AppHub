@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AppHub — Personal Android App Store</title>
+  <meta name="description" content="Personal open-source Android App Store for Pharmacophobia apps with direct 1-tap APK downloads and camera-scannable QR codes.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2224%22>🚀</text></svg>">
+  <style>
+    :root {
+      --bg: #181825;
+      --card-bg: #1e1e2e;
+      --card-hover: #242438;
+      --surface: #313244;
+      --text: #cdd6f4;
+      --subtext: #a6adc8;
+      --accent: #89b4fa;
+      --accent-hover: #b4befe;
+      --green: #a6e3a1;
+      --peach: #fab387;
+      --mauve: #cba6f7;
+      --red: #f38ba8;
+      --border: #45475a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .hero-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(137, 180, 250, 0.12);
+      border: 1px solid var(--accent);
+      padding: 6px 16px;
+      border-radius: 999px;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #cdd6f4 0%, #89b4fa 50%, #cba6f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      font-size: 1.1rem;
+      color: var(--subtext);
+      max-width: 650px;
+      margin: 0 auto 24px;
+    }
+
+    .store-apk-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      max-width: 580px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .store-apk-info {
+      text-align: left;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .store-apk-info h3 {
+      font-size: 1.2rem;
+      color: var(--green);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .store-apk-info p {
+      font-size: 0.88rem;
+      color: var(--subtext);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: #11111b;
+    }
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-green {
+      background-color: var(--green);
+      color: #11111b;
+    }
+    .btn-green:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      background: var(--surface);
+      border-color: var(--accent);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 450px;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px 12px 42px;
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--subtext);
+      font-size: 16px;
+    }
+
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .cat-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--subtext);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .cat-btn.active, .cat-btn:hover {
+      background: var(--surface);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .app-card:hover {
+      transform: translateY(-3px);
+      border-color: #585b70;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .app-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .app-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+
+    .app-meta {
+      flex: 1;
+    }
+
+    .app-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .badges {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .badge-cat {
+      background: rgba(137, 180, 250, 0.15);
+      color: var(--accent);
+    }
+    .badge-ver {
+      background: rgba(166, 227, 161, 0.15);
+      color: var(--green);
+    }
+
+    .app-desc {
+      font-size: 0.92rem;
+      color: var(--subtext);
+      margin-bottom: 16px;
+      flex: 1;
+    }
+
+    .app-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .tag {
+      font-size: 11px;
+      color: #7f849c;
+      background: #181825;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .app-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .app-actions .btn {
+      flex: 1;
+    }
+
+    /* QR Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 360px;
+      width: 100%;
+      padding: 28px;
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: transparent;
+      border: none;
+      color: var(--subtext);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .modal-qr-img {
+      width: 220px;
+      height: 220px;
+      border-radius: 12px;
+      background: white;
+      padding: 8px;
+      margin: 16px auto;
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--subtext);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hero-container">
+      <div class="logo-badge">
+        <span>🚀</span> Pharmacophobia App Hub
+      </div>
+      <h1>Personal Android App Store</h1>
+      <p class="subtitle">
+        Direct 1-tap APK downloads, camera-scannable QR codes, and seamless auto-updating for all your custom Android apps.
+      </p>
+
+      <div class="store-apk-box">
+        <div class="store-apk-info">
+          <h3><span>📱</span> Install AppHub Client</h3>
+          <p>Download the dedicated Android App Store to install & update all your apps directly on your phone.</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="https://github.com/pharmacophobia/AppHub/raw/main/AppHub.apk" class="btn btn-green">
+            ⬇ Download AppHub.apk
+          </a>
+          <button onclick="openQr('AppHub', 'https://github.com/pharmacophobia/AppHub/raw/main/AppHub.apk')" class="btn btn-outline" title="Scan with Phone Camera">
+            📷 QR
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="controls">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search apps, features, or tags..." oninput="filterApps()">
+      </div>
+      <div class="categories" id="categoryContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <div class="apps-grid" id="appsGrid">
+      <!-- App Cards rendered dynamically -->
+    </div>
+  </main>
+
+  <!-- QR Code Modal -->
+  <div class="modal-backdrop" id="qrModal" onclick="closeQr(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeQr()">&times;</button>
+      <h3 id="modalTitle" style="color: var(--accent); margin-bottom: 4px;"></h3>
+      <p style="font-size: 13px; color: var(--subtext);">Scan with your phone's camera to immediately download & install the APK.</p>
+      <img id="modalQrImg" class="modal-qr-img" src="" alt="QR Code">
+      <a id="modalDownloadLink" href="#" class="btn btn-primary" style="width: 100%;">
+        Direct Download Link
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <p>Maintained by <a href="https://github.com/pharmacophobia" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 600;">@pharmacophobia</a> &bull; Zero-Cloud &bull; Direct GitHub Releases</p>
+  </footer>
+
+  <script>
+    let allApps = [];
+    let activeCategory = 'All';
+
+    async function loadApps() {
+      try {
+        const resp = await fetch('apps.json');
+        if (resp.ok) {
+          allApps = await resp.json();
+        } else {
+          throw new Error('Fallback to default');
+        }
+      } catch (e) {
+        allApps = [
+          {
+            id: "omnivault",
+            name: "OmniVault",
+            packageName: "com.omnivault",
+            version: "1.1.0",
+            category: "Security",
+            description: "Zero-Knowledge AI Password Manager with Raspberry Pi Pico USB Typer, local neural OCR, and biometric unlock.",
+            icon: "🔐",
+            color: "#89b4fa",
+            apkUrl: "https://github.com/pharmacophobia/OmniVault/raw/main/OmniVault.apk",
+            tags: ["Passwords", "Pico Typer", "Security", "Biometrics"]
+          },
+          {
+            id: "privacyguard",
+            name: "PrivacyGuard",
+            packageName: "com.privacyguard",
+            version: "1.0.0",
+            category: "Privacy",
+            description: "Open-source Android system auditor, permission inspector, tracker blocker, and network privacy dashboard.",
+            icon: "🛡️",
+            color: "#a6e3a1",
+            apkUrl: "https://github.com/pharmacophobia/PrivacyGuard/raw/main/PrivacyGuard.apk",
+            tags: ["Permissions", "Firewall", "Audit", "Privacy"]
+          },
+          {
+            id: "voxmind",
+            name: "VoxMind",
+            packageName: "com.voxmind.app",
+            version: "1.0.0",
+            category: "AI",
+            description: "Completely offline, local on-device AI voice assistant and agent executor powered by neural speech models.",
+            icon: "🧠",
+            color: "#cba6f7",
+            apkUrl: "https://github.com/pharmacophobia/VoxMind/raw/main/VoxMind.apk",
+            tags: ["AI", "Voice", "Offline", "LLM"]
+          },
+          {
+            id: "guitartuner",
+            name: "Guitar Tuner Pro",
+            packageName: "com.guitartuner.app",
+            version: "1.0.0",
+            category: "Audio",
+            description: "High-precision strobe audio guitar & instrument tuner with real-time FFT pitch analysis and custom alternate tunings.",
+            icon: "🎸",
+            color: "#fab387",
+            apkUrl: "https://github.com/pharmacophobia/GuitarTuner/raw/main/GuitarTuner.apk",
+            tags: ["Music", "Tuner", "Audio", "DSP"]
+          },
+          {
+            id: "featherfling",
+            name: "FeatherFling",
+            packageName: "com.stealthsms.app",
+            version: "1.0.0",
+            category: "Communication",
+            description: "Carrier-proof lightweight stealth communication client and local P2P encrypted messaging channel.",
+            icon: "🪶",
+            color: "#f9e2af",
+            apkUrl: "https://github.com/pharmacophobia/FeatherFeed/raw/main/FeatherFling.apk",
+            tags: ["SMS", "Stealth", "Feed", "P2P"]
+          },
+          {
+            id: "moonlightvr",
+            name: "Moonlight VR",
+            packageName: "com.pharmacophobia.moonlightvr",
+            version: "1.0.0",
+            category: "Gaming & VR",
+            description: "Ultra-low-latency PC game and desktop streaming client built for Android VR headsets and mobile screens.",
+            icon: "🥽",
+            color: "#74c7ec",
+            apkUrl: "https://github.com/pharmacophobia/MoonlightVR-Unity/raw/main/MoonlightVR-Unity.apk",
+            tags: ["VR", "Streaming", "Moonlight", "Gaming"]
+          },
+          {
+            id: "seedcipher",
+            name: "SeedCipher",
+            packageName: "com.seedcipher.app",
+            version: "1.0.0",
+            category: "Security",
+            description: "Encrypted SMS and steganography encoder for sensitive crypto seeds, mnemonic phrases, and private keys.",
+            icon: "🌱",
+            color: "#94e2d5",
+            apkUrl: "https://github.com/pharmacophobia/SeedCipher/raw/main/SeedCipher.apk",
+            tags: ["Crypto", "Seed", "Steganography", "SMS"]
+          }
+        ];
+      }
+
+      renderCategories();
+      renderApps(allApps);
+    }
+
+    function renderCategories() {
+      const cats = ['All', ...new Set(allApps.map(a => a.category))];
+      const container = document.getElementById('categoryContainer');
+      container.innerHTML = cats.map(c => `
+        <button class="cat-btn ${c === activeCategory ? 'active' : ''}" onclick="selectCategory('${c}')">${c}</button>
+      `).join('');
+    }
+
+    function selectCategory(cat) {
+      activeCategory = cat;
+      renderCategories();
+      filterApps();
+    }
+
+    function filterApps() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const filtered = allApps.filter(app => {
+        const matchesCat = activeCategory === 'All' || app.category === activeCategory;
+        const matchesQuery = !q ||
+          app.name.toLowerCase().includes(q) ||
+          app.description.toLowerCase().includes(q) ||
+          (app.tags && app.tags.some(t => t.toLowerCase().includes(q)));
+        return matchesCat && matchesQuery;
+      });
+      renderApps(filtered);
+    }
+
+    function renderApps(apps) {
+      const grid = document.getElementById('appsGrid');
+      if (apps.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--subtext);">No apps found matching your search.</div>`;
+        return;
+      }
+
+      grid.innerHTML = apps.map(app => `
+        <div class="app-card">
+          <div>
+            <div class="app-header">
+              <div class="app-icon" style="border-color: ${app.color || '#89b4fa'}40;">${app.icon || '📦'}</div>
+              <div class="app-meta">
+                <div class="app-title">${app.name}</div>
+                <div class="badges">
+                  <span class="badge badge-cat">${app.category}</span>
+                  <span class="badge badge-ver">v${app.version || '1.0.0'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="app-desc">${app.description}</div>
+            <div class="app-tags">
+              ${(app.tags || []).map(t => `<span class="tag">#${t}</span>`).join('')}
+            </div>
+          </div>
+          <div class="app-actions">
+            <a href="${app.apkUrl}" class="btn btn-primary" download>
+              ⬇ Install APK
+            </a>
+            <button onclick="openQr('${app.name}', '${app.apkUrl}')" class="btn btn-outline" title="Show QR Code">
+              📷 QR
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openQr(title, url) {
+      document.getElementById('modalTitle').innerText = title;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(url)}`;
+      document.getElementById('modalQrImg').src = qrUrl;
+      document.getElementById('modalDownloadLink').href = url;
+      document.getElementById('qrModal').classList.add('open');
+    }
+
+    function closeQr(e) {
+      document.getElementById('qrModal').classList.remove('open');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeQr();
+    });
+
+    loadApps();
+  </script>
+</body>
+</html>
