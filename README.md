@@ -25,6 +25,7 @@ You can also browse and download all apps directly from the web store:
 
 | App | Category | Description | Direct Download |
 | :--- | :--- | :--- | :--- |
+| **⚡ AirBridge** | Audio & Productivity | Seamless Phone-to-PC Companion: Low-latency virtual mic, instant image vault, and GPU AI transcription. | [Download APK](https://github.com/pharmacophobia/AirBridge/raw/main/AirBridge.apk) |
 | **🔐 OmniVault** | Security | Zero-Knowledge AI Password Manager with Raspberry Pi Pico USB Typer & local neural OCR. | [Download APK](https://github.com/pharmacophobia/OmniVault/raw/main/OmniVault.apk) |
 | **🛡️ PrivacyGuard** | Privacy | Android permission inspector, tracker blocker, and network privacy auditor. | [Download APK](https://github.com/pharmacophobia/PrivacyGuard/raw/main/PrivacyGuard.apk) |
 | **🧠 VoxMind** | AI | Completely offline, on-device local AI voice assistant and agent executor. | [Download APK](https://github.com/pharmacophobia/VoxMind/raw/main/VoxMind.apk) |

@@ -47,6 +47,20 @@ object AppRepository {
 
     private val FALLBACK_APPS = listOf(
         AppItem(
+            id = "airbridge",
+            name = "AirBridge",
+            packageName = "com.airbridge.app",
+            version = "1.0.0",
+            category = "Audio & Productivity",
+            description = "Seamless Phone-to-PC Companion: Low-latency virtual microphone, instant image vault with auto-clipboard sync, and GPU AI transcription.",
+            icon = "⚡",
+            colorHex = "#06b6d4",
+            githubRepo = "pharmacophobia/AirBridge",
+            apkUrl = "https://github.com/pharmacophobia/AirBridge/raw/main/AirBridge.apk",
+            releaseUrl = "https://github.com/pharmacophobia/AirBridge/releases/latest",
+            tags = listOf("Virtual Mic", "Clipboard", "Images", "Whisper AI", "Companion")
+        ),
+        AppItem(
             id = "omnivault",
             name = "OmniVault",
             packageName = "com.omnivault",
